@@ -287,7 +287,7 @@ ROCs <- function(method = "full", T, Dvec, V, A = NULL, rhoEst = NULL, piEst = N
   name_diagnostic <- unlist(strsplit(name_diagnostic, NULL))
   if(any(name_diagnostic %in% c("$"))){
     id.name <- which(name_diagnostic %in% c("$"))
-    name_diagnostic <- paste(name_diagnostic[(id.name + 1) : length(name_diagnostic)],
+    name_diagnostic <- paste(name_diagnostic[(id.name[1] + 1) : length(name_diagnostic)],
                              collapse = "")
   }
   else name_diagnostic <- paste(name_diagnostic, collapse = "")
@@ -315,6 +315,7 @@ ROCs <- function(method = "full", T, Dvec, V, A = NULL, rhoEst = NULL, piEst = N
   if(missing(V)){
     if(methodtemp != "full" | Dvec.flag) stop("argument \"V\" is missing, in addition, the method is not \"full\" or argument \"Dvec\" includes NA")
     cat("Hmm, look likes the full data\n")
+    cat("Number of observation:", length(T), "\n")
     cat("The verification status is not available\n")
     cat("You are working on FULL or Complete Case approach\n")
     cat("The diagnostic test:", name_diagnostic, "\n")
@@ -328,6 +329,7 @@ ROCs <- function(method = "full", T, Dvec, V, A = NULL, rhoEst = NULL, piEst = N
     if(all(V == 1)){
       if(methodtemp != "full" | Dvec.flag) stop("Please, check your inputs and see whether they are correct or not.\n If you want to estimate Complete Case approach, please, remove the missing values in the \n data set and try again with the option of \"full\" method.")
       cat("Hmm, look likes the full data\n")
+      cat("Number of observation:", length(T), "\n")
       cat("All subjects underwent the verification process\n")
       cat("You are working on FULL or Complete Case approach\n")
       cat("The diagnostic test:", name_diagnostic, "\n")
@@ -339,6 +341,7 @@ ROCs <- function(method = "full", T, Dvec, V, A = NULL, rhoEst = NULL, piEst = N
       if(!Dvec.flag){
         cat("Warning: There are no NA values in variable Dvec, while", paste(round(rv*100), "%", sep = ""), "of the subjects receive disease verification. \n")
         cat("BE CAREFULL OF YOUR INPUT AND RESULTS \n")
+        cat("Number of observation:", length(T), "\n")
         cat("You required estimate ROC surface using", method_name, "approach \n")
         cat("The diagnostic test:", name_diagnostic, "\n")
         cat("Processing .... \n")
@@ -346,6 +349,7 @@ ROCs <- function(method = "full", T, Dvec, V, A = NULL, rhoEst = NULL, piEst = N
       }
       else{
         cat("Hmm, look likes the incomplete data\n")
+        cat("Number of observation:", length(T), "\n")
         cat(paste(round(rv*100), "%", sep = ""), "of the subjects receive disease verification. \n")
         cat("You required estimate ROC surface using", method_name, "approach \n")
         cat("The diagnostic test:", name_diagnostic, "\n")

@@ -102,4 +102,3 @@ To Duc, K., Chiogna, M. and Adimari, G. (2016b)
 Nonparametric Estimation of ROC Surfaces Under Verification Bias.
 \url{https://arxiv.org/abs/1604.04656v1}. Submitted.
 }
-

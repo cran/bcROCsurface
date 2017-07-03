@@ -40,9 +40,7 @@
 #' \item{std}{the standard error, obtained by using asymptotic theory or bootstrap resampling method.}
 #' \item{call}{the matched call.}
 #' \item{t.stat}{t-statistic.}
-#' \item{W.stat}{Wald statistic.}
 #' \item{p.val_norm}{p-value correspond to normal-test.}
-#' \item{p.val_chisq}{p-value correspond to Wald-test.}
 #' \item{ci.norm}{the confidence interval of VUS by using normal approximation.}
 #' \item{ci.logit}{the confidence interval of VUS via logit transform.}
 #' \item{ci.level}{the confidence level used.}
@@ -124,7 +122,7 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
   name_diagnostic <- unlist(strsplit(name_diagnostic, NULL))
   if(any(name_diagnostic %in% c("$"))){
     id.name <- which(name_diagnostic %in% c("$"))
-    name_diagnostic <- paste(name_diagnostic[(id.name + 1) : length(name_diagnostic)],
+    name_diagnostic <- paste(name_diagnostic[(id.name[1] + 1) : length(name_diagnostic)],
                              collapse = "")
   }
   else name_diagnostic <- paste(name_diagnostic, collapse = "")
@@ -149,9 +147,10 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
   ## checking V
   if(missing(V)){
     if(methodtemp != "full" | Dvec.flag) stop("argument \"V\" is missing, in addition, the method is not \"full\" or argument \"Dvec\" includes NA")
-    cat("Hmm, look likes the full data\n")
-    cat("The verification status is not available\n")
-    cat("You are working on FULL or Complete Case approach\n")
+    cat("Hmm, look likes the full data.\n")
+    cat("The verification status is not available.\n")
+    cat("You are working on FULL or Complete Case approach.\n")
+    cat("Number of observation:", length(T), "\n")
     cat("The diagnostic test:", name_diagnostic, "\n")
     cat("Processing .... \n")
     flush.console()
@@ -163,6 +162,7 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
     if(all(V == 1)){
       if(methodtemp != "full" | Dvec.flag) stop("Please, check your inputs and see whether they are correct or not.\n If you want to estimate Complete Case approach, please, remove the missing values in the \n data set and try again with the option of \"full\" method.")
       cat("Hmm, look likes the full data\n")
+      cat("Number of observation:", length(T), "\n")
       cat("All subjects underwent the verification process\n")
       cat("You are working on FULL or Complete Case approach\n")
       cat("The diagnostic test:", name_diagnostic, "\n")
@@ -174,6 +174,7 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
       if(!Dvec.flag){
         cat("Warning: There are no NA values in variable Dvec, while", paste(round(rv*100), "%", sep = ""), "of the subjects receive disease verification. \n")
         cat("BE CAREFULL OF YOUR INPUT AND RESULTS \n")
+        cat("Number of observation:", length(T), "\n")
         cat("You required estimate VUS using", method_name, "approach \n")
         cat("The diagnostic test:", name_diagnostic, "\n")
         cat("Processing .... \n")
@@ -181,6 +182,7 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
       }
       else{
         cat("Hmm, look likes the incomplete data\n")
+        cat("Number of observation:", length(T), "\n")
         cat(paste(round(rv*100), "%", sep = ""), "of the subjects receive disease verification. \n")
         cat("You required estimate VUS using", method_name, "approach \n")
         cat("The diagnostic test:", name_diagnostic, "\n")
@@ -196,6 +198,7 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
       ques <- readline("Do you want use Complete Case (CC) approach? [y/n]: ")
       if(ques %in% c("y", "n")){
         if(ques == "y"){
+          cat("Number of observation:", length(T), "\n")
           cat("We are estimating VUS by using CC method \n")
           cat("BE CAREFULL OF THE RESULTS. THIS CAN MAKE THE DISTORTED INFERENCE IN VUS \n")
           cat("Processing .... \n")
@@ -249,11 +252,9 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
     cf.ans.tran <- exp(log.cf)/(1 + exp(log.cf))
     W <- (ans - 1/6)/sqrt(var.ans)
     p.val_norm <- 1 - pnorm(W)
-    p.val_chisq <- 1 - pchisq(W^2, df = 1)
-    res <- list(vus.fit = ans, std = sqrt(var.ans), t.stat = W, W.stat = W^2,
-                p.val_norm = p.val_norm, p.val_chisq = p.val_chisq,
-                ci.norm = cf.ans, ci.logit = cf.ans.tran, call = call,
-                ci.level = ci.level, BOOT = BOOT, nR = nR)
+    res <- list(vus.fit = ans, std = sqrt(var.ans), t.stat = W,
+                p.val_norm = p.val_norm, ci.norm = cf.ans, ci.logit = cf.ans.tran,
+                call = call, ci.level = ci.level, BOOT = BOOT, nR = nR)
 		class(res) <- "vus"
   }
   cat("DONE\n")
@@ -286,11 +287,11 @@ print.vus <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     res.tab[1L] <- paste("\n",x$ci.level*100,"% ",sep = "")
     res.tab[2*(1L:2L)] <- paste(" (",res.tab[2*(1L:2L)],",",sep = "")
     res.tab[2*(1L:2L) + 1L] <- paste(res.tab[2*(1L:2L) + 1L],") ")
-    p.val <- c(x$p.val_norm, x$p.val_chisq)
-    stat <- c(x$t.stat, x$W.stat)
+    p.val <- x$p.val_norm
+    stat <- x$t.stat
     test.tab <- cbind(stat, p.val)
     colnames(test.tab) <- c("Test Statistic", "P-value")
-    rownames(test.tab) <- c("Normal-test", "Wald-test")
+    rownames(test.tab) <- "Normal-test"
     ci.name <- c("       Normal        ", "       Logit        ")
     cat("Estimate of VUS:", format(round(x$vus.fit, digits = digits)), "\n")
     cat("Standard error:", format(round(x$std, digits = digits)), "\n")

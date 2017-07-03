@@ -88,7 +88,7 @@ library(rgl)
 knit_hooks$set(webgl = hook_webgl)
 ```
 
-```{r ROCsFULL, webgl = TRUE}
+```{r ROCsFULL, webGL = TRUE}
 Dvec.full <- Dfull$Dvec
 ROCs(method = "full", T = EOC$CA125, Dvec = Dvec.full, ncp = 30, ellipsoid = TRUE,
      cpst = c(-0.56, 2.31))
@@ -105,6 +105,7 @@ vus("full", T = EOC$CA125, Dvec = Dvec.full, ci = TRUE, parallel = TRUE)
 ## Hmm, look likes the full data
 ## The verification status is not available
 ## You are working on FULL or Complete Case approach
+## Number of observation: 278
 ## The diagnostic test: CA125 
 ## Processing .... 
 ## DONE
@@ -123,7 +124,6 @@ vus("full", T = EOC$CA125, Dvec = Dvec.full, ci = TRUE, parallel = TRUE)
 ## Testing the null hypothesis H0: VUS = 1/6 
 ##             Test Statistic   P-value    
 ## Normal-test         10.596 < 2.2e-16 ***
-## Wald-test          112.270 < 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
@@ -150,6 +150,7 @@ vus(method = "fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, c
 
 ```
 ## Hmm, look likes the incomplete data
+## Number of observation: 278
 ## 64% of the subjects receive disease verification. 
 ## You required estimate VUS using FI approach 
 ## The diagnostic test: CA125 
@@ -170,7 +171,6 @@ vus(method = "fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, c
 ## Testing the null hypothesis H0: VUS = 1/6 
 ##             Test Statistic   P-value    
 ## Normal-test         8.6168 < 2.2e-16 ***
-## Wald-test          74.2496 < 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
@@ -187,6 +187,7 @@ vus(method = "msi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, 
 
 ```
 ## Hmm, look likes the incomplete data
+## Number of observation: 278
 ## 64% of the subjects receive disease verification. 
 ## You required estimate VUS using MSI approach 
 ## The diagnostic test: CA125 
@@ -207,7 +208,6 @@ vus(method = "msi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, 
 ## Testing the null hypothesis H0: VUS = 1/6 
 ##             Test Statistic   P-value    
 ## Normal-test         8.4644 < 2.2e-16 ***
-## Wald-test          71.6463 < 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
@@ -231,6 +231,7 @@ vus(method = "ipw", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, piEst = pi.out, ci
 
 ```
 ## Hmm, look likes the incomplete data
+## Number of observation: 278
 ## 64% of the subjects receive disease verification. 
 ## You required estimate VUS using IPW approach 
 ## The diagnostic test: CA125 
@@ -251,7 +252,6 @@ vus(method = "ipw", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, piEst = pi.out, ci
 ## Testing the null hypothesis H0: VUS = 1/6 
 ##             Test Statistic   P-value    
 ## Normal-test         9.2212 < 2.2e-16 ***
-## Wald-test          85.0302 < 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
@@ -269,6 +269,7 @@ vus(method = "spe", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out,
 ```
 ```
 ## Hmm, look likes the incomplete data
+## Number of observation: 278
 ## 64% of the subjects receive disease verification. 
 ## You required estimate VUS using SPE approach 
 ## The diagnostic test: CA125 
@@ -289,7 +290,6 @@ vus(method = "spe", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out,
 ## Testing the null hypothesis H0: VUS = 1/6 
 ##            Test Statistic   P-value    
 ## Normal-test          8.827 < 2.2e-16 ***
-## Wald-test           77.916 < 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
@@ -317,6 +317,7 @@ vus(method = "knn", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.1nn, 
 
 ```
 ## Hmm, look likes the incomplete data
+## Number of observation: 278
 ## 64% of the subjects receive disease verification. 
 ## You required estimate VUS using KNN approach 
 ## The diagnostic test: CA125 
@@ -337,7 +338,6 @@ vus(method = "knn", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.1nn, 
 ## Testing the null hypothesis H0: VUS = 1/6 
 ##             Test Statistic   P-value    
 ## Normal-test         7.3048 1.388e-13 ***
-## Wald-test          53.3608 2.776e-13 ***
 ## ---
 ## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```

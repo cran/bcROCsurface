@@ -36,3 +36,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"bcROCsurface_asyVarVUS_C", (DL_FUNC) &bcROCsurface_asyVarVUS_C, 8},
+    {"bcROCsurface_vusC", (DL_FUNC) &bcROCsurface_vusC, 2},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_bcROCsurface(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

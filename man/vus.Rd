@@ -44,9 +44,7 @@ An object of class "vus" is a list containing at least the following components:
 \item{std}{the standard error, obtained by using asymptotic theory or bootstrap resampling method.}
 \item{call}{the matched call.}
 \item{t.stat}{t-statistic.}
-\item{W.stat}{Wald statistic.}
 \item{p.val_norm}{p-value correspond to normal-test.}
-\item{p.val_chisq}{p-value correspond to Wald-test.}
 \item{ci.norm}{the confidence interval of VUS by using normal approximation.}
 \item{ci.logit}{the confidence interval of VUS via logit transform.}
 \item{ci.level}{the confidence level used.}
@@ -111,4 +109,3 @@ To Duc, K., Chiogna, M. and Adimari, G. (2016)
 Bias-corrected methods for estimating the receiver operating characteristic surface of continuous diagnostic tests.
 \emph{Electronic Journal of Statistics}, \bold{10}, 3063-3113.
 }
-

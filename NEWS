@@ -1,0 +1,8 @@
+Version 1.0-2 (3rd July 2017)
+-------------
+* Fixed the Makevars and Makevars.win
+* Corrected the hypothesis testing for VUS
+
+Version 1.0-1 (17th November 2016)
+-------------
+* First release.

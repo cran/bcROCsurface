@@ -68,4 +68,3 @@ To Duc, K., Chiogna, M. and Adimari, G. (2016)
 Bias-corrected methods for estimating the receiver operating characteristic surface of continuous diagnostic tests.
 \emph{Electronic Journal of Statistics}, \bold{10}, 3063-3113.
 }
-

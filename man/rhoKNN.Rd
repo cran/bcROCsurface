@@ -60,4 +60,3 @@ out.maha.13nn <- rhoKNN(XX, Dvec.na, EOC$V, K = c(1,3), type = "mahala")
 \references{
 To Duc, K., Chiogna, M., Adimari, G. (2016): Nonparametric Estimation of ROC Surfaces Under Verification Bias. \url{https://arxiv.org/abs/1604.04656v1}. Submitted.
 }
-

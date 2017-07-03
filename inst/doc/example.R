@@ -24,7 +24,7 @@ library(knitr)
 library(rgl)
 knit_hooks$set(webgl = hook_webgl)
 
-## ----ROCsFULL, webgl = TRUE----------------------------------------------
+## ----ROCsFULL, webGL = TRUE----------------------------------------------
 Dvec.full <- Dfull$Dvec
 ROCs(method = "full", T = EOC$CA125, Dvec = Dvec.full, ncp = 30, ellipsoid = TRUE,
      cpst = c(-0.56, 2.31))

@@ -48,4 +48,3 @@ Bias-corrected methods for estimating the receiver operating characteristic surf
 \seealso{
 \code{\link[nnet]{multinom}}, \code{\link[nnet]{nnet}}
 }
-
