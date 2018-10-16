@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // asyVarVUS_C
 NumericVector asyVarVUS_C(NumericVector tt, NumericMatrix D_hat, double mu_hat, NumericMatrix EstFunc, NumericMatrix Hess_inv, NumericMatrix Der_D1_hat, NumericMatrix Der_D2_hat, NumericMatrix Der_D3_hat);
-RcppExport SEXP bcROCsurface_asyVarVUS_C(SEXP ttSEXP, SEXP D_hatSEXP, SEXP mu_hatSEXP, SEXP EstFuncSEXP, SEXP Hess_invSEXP, SEXP Der_D1_hatSEXP, SEXP Der_D2_hatSEXP, SEXP Der_D3_hatSEXP) {
+RcppExport SEXP _bcROCsurface_asyVarVUS_C(SEXP ttSEXP, SEXP D_hatSEXP, SEXP mu_hatSEXP, SEXP EstFuncSEXP, SEXP Hess_invSEXP, SEXP Der_D1_hatSEXP, SEXP Der_D2_hatSEXP, SEXP Der_D3_hatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -26,7 +26,7 @@ END_RCPP
 }
 // vusC
 double vusC(NumericVector tt, NumericMatrix dd);
-RcppExport SEXP bcROCsurface_vusC(SEXP ttSEXP, SEXP ddSEXP) {
+RcppExport SEXP _bcROCsurface_vusC(SEXP ttSEXP, SEXP ddSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -36,14 +36,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-
-static const R_CallMethodDef CallEntries[] = {
-    {"bcROCsurface_asyVarVUS_C", (DL_FUNC) &bcROCsurface_asyVarVUS_C, 8},
-    {"bcROCsurface_vusC", (DL_FUNC) &bcROCsurface_vusC, 2},
-    {NULL, NULL, 0}
-};
-
-RcppExport void R_init_bcROCsurface(DllInfo *dll) {
-    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
-    R_useDynamicSymbols(dll, FALSE);
+// vusC_full
+double vusC_full(NumericVector tt1, NumericVector tt2, NumericVector tt3);
+RcppExport SEXP _bcROCsurface_vusC_full(SEXP tt1SEXP, SEXP tt2SEXP, SEXP tt3SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type tt1(tt1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type tt2(tt2SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type tt3(tt3SEXP);
+    rcpp_result_gen = Rcpp::wrap(vusC_full(tt1, tt2, tt3));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vusC_full_core
+List vusC_full_core(NumericVector tt1, NumericVector tt2, NumericVector tt3);
+RcppExport SEXP _bcROCsurface_vusC_full_core(SEXP tt1SEXP, SEXP tt2SEXP, SEXP tt3SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type tt1(tt1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type tt2(tt2SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type tt3(tt3SEXP);
+    rcpp_result_gen = Rcpp::wrap(vusC_full_core(tt1, tt2, tt3));
+    return rcpp_result_gen;
+END_RCPP
 }

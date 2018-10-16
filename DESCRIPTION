@@ -1,6 +1,6 @@
 Package: bcROCsurface
-Version: 1.0-2
-Date: 2017-07-03
+Version: 1.0-3
+Date: 2018-10-16
 Title: Bias-Corrected Methods for Estimating the ROC Surface of
         Continuous Diagnostic Tests
 Author: Khanh To Duc, with contributions from Monica Chiogna and Gianfranco Adimari
@@ -16,10 +16,11 @@ LinkingTo: Rcpp, RcppArmadillo
 LazyLoad: yes
 LazyData: TRUE
 ByteCompile: yes
-RoxygenNote: 6.0.1
+Encoding: UTF-8
+RoxygenNote: 6.1.0
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2017-07-03 07:02:06 UTC; duckhanh
+Packaged: 2018-10-16 15:00:01 UTC; khanh
 Repository: CRAN
-Date/Publication: 2017-07-03 07:18:15 UTC
+Date/Publication: 2018-10-16 18:30:06 UTC

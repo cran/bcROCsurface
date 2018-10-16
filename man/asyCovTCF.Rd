@@ -5,8 +5,8 @@
 \title{Asymptotic variance-covariance estimation for True Class Fractions (TCFs) at the cut point \eqn{(c_1, c_2)}}
 \usage{
 asyCovTCF(obj_tcf, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
-  BOOT = FALSE, nR = 250, parallel = FALSE, ncpus = ifelse(parallel,
-  detectCores()/2, NULL))
+  BOOT = FALSE, nR = 250, parallel = FALSE,
+  ncpus = ifelse(parallel, detectCores()/2, NULL))
 }
 \arguments{
 \item{obj_tcf}{a result of a call to \code{\link{ROCs.tcf}}.}

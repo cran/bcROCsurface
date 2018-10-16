@@ -21,16 +21,24 @@
 #'
 #'
 #' @details
-#' For the FULL and K nearest neighbor estimators, a bootstrap resampling process is employed to obtain their asymptotic variance.
+#' For the FULL estimator, a bootstrap resampling process or Jackknife approach is used to estimate the asymptotic variance, whereas, a bootstrap resampling process is employed to obtain the asymptotic variance of K nearest neighbor estimator.
 #'
 #' For the full imputation, mean score imputation, inverse probability weighting and semiparametric efficient estimators of VUS, the asymptotic variances are computed by using the explicit form. Furthermore, a bootstrap procedure is also available, useful in case of small sample sizes.
 #'
 #' @return \code{asyVarVUS} returns a estimated value of the asymptotic variance.
 #'
 #' @references
+#' To Duc, K., Chiogna, M. and Adimari, G. (2018)
+#' Nonparametric estimation of ROC surfaces in presence of verification bias.
+#' \emph{REVSTAT Statistical Journal}. Accepted.
+#'
 #' To Duc, K., Chiogna, M. and Adimari, G. (2016)
 #' Bias-corrected methods for estimating the receiver operating characteristic surface of continuous diagnostic tests.
 #' \emph{Electronic Journal of Statistics}, \bold{10}, 3063-3113.
+#'
+#' Guangming, P., Xiping, W. and Wang, Z. (2013)
+#' Non-parameteric statistical inference for $P(X < Y < Z)$.
+#' \emph{Sankhya A}, \bold{75}, 1, 118-138.
 #'
 #'
 #' @examples
@@ -42,11 +50,10 @@
 #' Dvec.na <- Dna$Dvec
 #'
 #' rho.out <- rhoMLogit(Dfact.na ~ CA125 + CA153 + Age, data = EOC, test = TRUE)
-#' pi.out <- psglm(V ~ CA125 + CA153 + Age, data = EOC, test = TRUE)
-#' vus.spe <- vus("spe", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out,
-#'                piEst = pi.out, ci = FALSE)
-#' var.spe <- asyVarVUS(vus.spe, T = EOC$CA125, Dvec = Dvec.na, V = EOC$V,
-#'                      rhoEst = rho.out, piEst = pi.out)
+#' vus.fi <- vus("fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out,
+#'               ci = FALSE)
+#' var.fi <- asyVarVUS(vus.fi, T = EOC$CA125, Dvec = Dvec.na, V = EOC$V,
+#'                    rhoEst = rho.out)
 #'
 #' \dontrun{
 #' var.bst.spe <- asyVarVUS(vus.spe, T = EOC$CA125, Dvec = Dvec.na, V = EOC$V,
@@ -115,7 +122,7 @@ asyVarVUS <- function(obj_vus, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
                         ncpus = ncpus)
       }
       else res.bst <- boot(data, bst.fi, R = nR, formula = rhoEst$formula)
-      ans_var <- as.numeric(var(res.bst$t))
+      ans_var <- as.numeric(var(res.bst$t, na.rm = TRUE))
     }
   }
   else if(meth == "msi"){
@@ -147,7 +154,7 @@ asyVarVUS <- function(obj_vus, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
                         parallel = "snow", ncpus = ncpus)
       }
       else res.bst <- boot(data, bst.msi, R = nR, formula = rhoEst$formula)
-      ans_var <- as.numeric(var(res.bst$t))
+      ans_var <- as.numeric(var(res.bst$t, na.rm = TRUE))
     }
   }
   else if(meth == "ipw"){
@@ -179,7 +186,7 @@ asyVarVUS <- function(obj_vus, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
                         parallel = "snow", ncpus = ncpus)
       }
       else res.bst <- boot(data, bst.ipw, R = nR, formula = form)
-      ans_var <- as.numeric(var(res.bst$t))
+      ans_var <- as.numeric(var(res.bst$t, na.rm = TRUE))
     }
   }
   else if(meth == "spe"){
@@ -228,7 +235,7 @@ asyVarVUS <- function(obj_vus, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
       }
       else res.bst <- boot(data, bst.spe, R = nR, formula.rho = rhoEst$formula,
                            formula.pi = piEst$formula)
-      ans_var <- as.numeric(var(res.bst$t))
+      ans_var <- as.numeric(var(res.bst$t, na.rm = TRUE))
     }
   }
   else if(meth == "knn"){
@@ -247,19 +254,37 @@ asyVarVUS <- function(obj_vus, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
                       parallel = "snow", ncpus = ncpus)
     }
     else res.bst <- boot(data, bst.knn, R = nR, k = rhoEst$K, type = rhoEst$type)
-    ans_var <- as.numeric(var(res.bst$t))
+    ans_var <- as.numeric(var(res.bst$t, na.rm = TRUE))
   }
   else{
-    bst.full <- function(dt, inds){
-      dat <- dt[inds,]
-      vusC(dat[,1], as.matrix(dat[,c(2:4)]))
+    if(!BOOT){
+      T1 <- T[Dvec[, 1] == 1]
+      T2 <- T[Dvec[, 2] == 1]
+      T3 <- T[Dvec[, 3] == 1]
+      n1 <- length(T1)
+      n2 <- length(T2)
+      n3 <- length(T3)
+      vus_est_mult <- VUS_obj * n1 * n2 * n3
+      var_term <- vusC_full_core(T1, T2, T3)
+      var_term_i <- sapply(1:n1, function(x) sum(var_term$ind1[-x]))
+      var_term_j <- sapply(1:n2, function(x) sum(var_term$ind2[-x]))
+      var_term_k <- sapply(1:n3, function(x) sum(var_term$ind3[-x]))
+      ans_var <- var((vus_est_mult - var_term_i)/(n2*n3))/n1 +
+        var((vus_est_mult - var_term_j)/(n1*n3))/n2 +
+        var((vus_est_mult - var_term_k)/(n1*n2))/n3
     }
-    data <- data.frame(T, Dvec.temp)
-    if(parallel){
-      res.bst <- boot(data, bst.full, R = nR, parallel = "snow", ncpus = ncpus)
+    else{
+      bst.full <- function(dt, inds){
+        dat <- dt[inds,]
+        vusC(dat[,1], as.matrix(dat[,c(2:4)]))
+      }
+      data <- data.frame(T, Dvec.temp)
+      if(parallel){
+        res.bst <- boot(data, bst.full, R = nR, parallel = "snow", ncpus = ncpus)
+      }
+      else res.bst <- boot(data, bst.full, R = nR)
+      ans_var <- as.numeric(var(res.bst$t, na.rm = TRUE))
     }
-    else res.bst <- boot(data, bst.full, R = nR)
-    ans_var <- as.numeric(var(res.bst$t))
   }
   return(ans_var)
 }

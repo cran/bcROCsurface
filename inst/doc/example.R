@@ -30,7 +30,7 @@ ROCs(method = "full", T = EOC$CA125, Dvec = Dvec.full, ncp = 30, ellipsoid = TRU
      cpst = c(-0.56, 2.31))
 
 ## ----vusfull, eval = FALSE-----------------------------------------------
-#  vus("full", T = EOC$CA125, Dvec = Dvec.full, ci = TRUE, parallel = TRUE)
+#  vus("full", T = EOC$CA125, Dvec = Dvec.full, ci = TRUE)
 
 ## ----disease, eval = TRUE------------------------------------------------
 Dna <- preDATA(EOC$D, EOC$CA125)

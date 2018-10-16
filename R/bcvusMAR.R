@@ -20,11 +20,12 @@
 #' @param nR  the number of bootstrap replicates, which is used for FULL or KNN estimator, or option \code{BOOT = TRUE}. Usually this will be a single positive integer.
 #' @param parallel  a logical value. If \code{TRUE}, a parallel computing is employed to the bootstrap resampling process.
 #' @param ncpus  number of processes to be used in parallel computing. Default is a half of available cores.
+#' @param trace a logical value. If \code{TRUE}, tracing information on the progress of the estimation is produced.
 #'
 #' @details
-#' The function implements five bias-corrected estimation methods in To Duc et al. (2016) for estimating VUS of a three-class continuous diagnostic test in presence of verification bias. The estimators are full imputation (FI), mean score imputation (MSI), inverse probability weighted (IPW), semiparametric efficient (SPE) and K nearest-neighbor (KNN), see \code{\link{ROCs}}. These esitmators work under MAR assumption.
+#' The function implements five bias-corrected estimation methods in To Duc et al. (2016, 2018) for estimating VUS of a three-class continuous diagnostic test in presence of verification bias. The estimators are full imputation (FI), mean score imputation (MSI), inverse probability weighted (IPW), semiparametric efficient (SPE) and K nearest-neighbor (KNN), see \code{\link{ROCs}}. These esitmators work under MAR assumption.
 #'
-#' The asymptotic variance is computed by using asymptotic theory (with respect to FI, MSI, IPW and SPE estimator) or bootstrap resampling method (with respect to FULL and KNN estimator) via the function \code{\link{asyVarVUS}}. A confidence interval of VUS also is given. A logit transformation is also applied for obtaining the confidence interval.
+#' The standard error of the estimates are obtained through the function \code{\link{asyVarVUS}}. In particular, the standard error of the FULL estimate is computed by bootrap resampling method or by Jackknife approach proposed in Guangming et al. (2013). For the bias-corrected estimates, the standard errors are computed by using asymptotic theory (with respect to FI, MSI, IPW and SPE estimator) or bootstrap resampling method (with respect to KNN estimator). A confidence interval of VUS also is given. A logit transformation is also applied for obtaining the confidence interval.
 #'
 #' The default value of the number of bootstrap replicates is 250.
 #'
@@ -50,9 +51,17 @@
 #' In addition, the name of method used to estimate VUS also is given as the attribute of \code{vus.fit}.
 #'
 #' @references
+#' To Duc, K., Chiogna, M. and Adimari, G. (2018)
+#' Nonparametric estimation of ROC surfaces in presence of verification bias.
+#' \emph{REVSTAT Statistical Journal}. Accepted.
+#'
 #' To Duc, K., Chiogna, M. and Adimari, G. (2016)
 #' Bias-corrected methods for estimating the receiver operating characteristic surface of continuous diagnostic tests.
 #' \emph{Electronic Journal of Statistics}, \bold{10}, 3063-3113.
+#'
+#' Guangming, P., Xiping, W. and Wang, Z. (2013)
+#' Non-parameteric statistical inference for $P(X < Y < Z)$.
+#' \emph{Sankhya A}, \bold{75}, 1, 118-138.
 #'
 #' @examples
 #' data(EOC)
@@ -95,12 +104,12 @@
 #' @import utils
 #' @import parallel
 #' @importFrom Rcpp evalCpp
-#' @useDynLib bcROCsurface
+#' @useDynLib bcROCsurface, .registration = TRUE
 #' @export
 vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
                 ci = TRUE, ci.level = ifelse(ci, 0.95, NULL), BOOT = FALSE,
                 nR = ifelse(ci, 250, NULL), parallel = FALSE,
-                ncpus = ifelse(parallel, detectCores()/2, NULL)){
+                ncpus = ifelse(parallel, detectCores()/2, NULL), trace = TRUE){
   ## return the function call
   call <- match.call()
   ## checking the method
@@ -147,13 +156,15 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
   ## checking V
   if(missing(V)){
     if(methodtemp != "full" | Dvec.flag) stop("argument \"V\" is missing, in addition, the method is not \"full\" or argument \"Dvec\" includes NA")
-    cat("Hmm, look likes the full data.\n")
-    cat("The verification status is not available.\n")
-    cat("You are working on FULL or Complete Case approach.\n")
-    cat("Number of observation:", length(T), "\n")
-    cat("The diagnostic test:", name_diagnostic, "\n")
-    cat("Processing .... \n")
-    flush.console()
+    if(trace){
+      cat("Hmm, look likes the full data.\n")
+      cat("The verification status is not available.\n")
+      cat("You are working on FULL or Complete Case approach.\n")
+      cat("Number of observation:", length(T), "\n")
+      cat("The diagnostic test:", name_diagnostic, "\n")
+      cat("Processing .... \n")
+      flush.console()
+    }
     V <- NULL
   }
   else{
@@ -161,33 +172,40 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
     if(nrow(Dvec) != length(V) | length(T) != length(V)) stop(gettextf("arguments imply differing number of observation: %d", nrow(Dvec)), gettextf(", %d", length(T)), gettextf(", %d", length(V)), domain = NA)
     if(all(V == 1)){
       if(methodtemp != "full" | Dvec.flag) stop("Please, check your inputs and see whether they are correct or not.\n If you want to estimate Complete Case approach, please, remove the missing values in the \n data set and try again with the option of \"full\" method.")
-      cat("Hmm, look likes the full data\n")
-      cat("Number of observation:", length(T), "\n")
-      cat("All subjects underwent the verification process\n")
-      cat("You are working on FULL or Complete Case approach\n")
-      cat("The diagnostic test:", name_diagnostic, "\n")
-      cat("Processing .... \n")
-      flush.console()
-    }
-    else{
-      rv <- mean(V)
-      if(!Dvec.flag){
-        cat("Warning: There are no NA values in variable Dvec, while", paste(round(rv*100), "%", sep = ""), "of the subjects receive disease verification. \n")
-        cat("BE CAREFULL OF YOUR INPUT AND RESULTS \n")
+      if(trace){
+        cat("Hmm, look likes the full data\n")
         cat("Number of observation:", length(T), "\n")
-        cat("You required estimate VUS using", method_name, "approach \n")
+        cat("All subjects underwent the verification process\n")
+        cat("You are working on FULL or Complete Case approach\n")
         cat("The diagnostic test:", name_diagnostic, "\n")
         cat("Processing .... \n")
         flush.console()
       }
+    }
+    else{
+      rv <- mean(V)
+      if(!Dvec.flag){
+        if(trace){
+          cat("Warning: There are no NA values in variable Dvec, while",
+              paste(round(rv*100), "%", sep = ""), "of the subjects receive disease verification. \n")
+          cat("BE CAREFULL OF YOUR INPUT AND RESULTS \n")
+          cat("Number of observation:", length(T), "\n")
+          cat("You required estimate VUS using", method_name, "approach \n")
+          cat("The diagnostic test:", name_diagnostic, "\n")
+          cat("Processing .... \n")
+          flush.console()
+        }
+      }
       else{
-        cat("Hmm, look likes the incomplete data\n")
-        cat("Number of observation:", length(T), "\n")
-        cat(paste(round(rv*100), "%", sep = ""), "of the subjects receive disease verification. \n")
-        cat("You required estimate VUS using", method_name, "approach \n")
-        cat("The diagnostic test:", name_diagnostic, "\n")
-        cat("Processing .... \n")
-        flush.console()
+        if(trace){
+          cat("Hmm, look likes the incomplete data\n")
+          cat("Number of observation:", length(T), "\n")
+          cat(paste(round(rv*100), "%", sep = ""), "of the subjects receive disease verification. \n")
+          cat("You required estimate VUS using", method_name, "approach \n")
+          cat("The diagnostic test:", name_diagnostic, "\n")
+          cat("Processing .... \n")
+          flush.console()
+        }
       }
     }
   }
@@ -198,11 +216,13 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
       ques <- readline("Do you want use Complete Case (CC) approach? [y/n]: ")
       if(ques %in% c("y", "n")){
         if(ques == "y"){
-          cat("Number of observation:", length(T), "\n")
-          cat("We are estimating VUS by using CC method \n")
-          cat("BE CAREFULL OF THE RESULTS. THIS CAN MAKE THE DISTORTED INFERENCE IN VUS \n")
-          cat("Processing .... \n")
-          flush.console()
+          if(trace){
+            cat("Number of observation:", length(T), "\n")
+            cat("We are estimating VUS by using CC method \n")
+            cat("BE CAREFULL OF THE RESULTS. THIS CAN MAKE THE DISTORTED INFERENCE IN VUS \n")
+            cat("Processing .... \n")
+            flush.console()
+          }
           Dvec <- Dvec[V == 1,]
           T <- T[V == 1]
           ans <- vusC(T, Dvec)
@@ -257,7 +277,7 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
                 call = call, ci.level = ci.level, BOOT = BOOT, nR = nR)
 		class(res) <- "vus"
   }
-  cat("DONE\n")
+  if(trace) cat("DONE\n")
   res
 }
 
@@ -298,8 +318,9 @@ print.vus <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     cat("\nIntervals:")
     cat("\nLevel", ci.name)
     cat(res.tab)
-    if(attr(x$vus, "name") %in% c("FULL", "KNN") | x$BOOT){
-      cat("\nEstimation of Standard Error and Intervals are based on Bootstrap with", x$nR, "replicates\n")
+    if(attr(x$vus, "name") %in% c("FULL", "KNN")){
+      if(x$BOOT) cat("\nEstimation of Standard Error and Intervals are based on Bootstrap with", x$nR, "replicates\n")
+      else cat("\nEstimation of Standard Error and Intervals are based on Jackknife approach \n")
     }
     else{
       cat("\nEstimation of Standard Error and Intervals are based on Asymptotic Theory \n")

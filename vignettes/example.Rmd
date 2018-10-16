@@ -98,7 +98,7 @@ Here, we consider the full data, so we only need to put the arguments `T` and `D
 
 The FULL estimator of VUS is obtained by the following command:
 ```{r vusfull, eval = FALSE}
-vus("full", T = EOC$CA125, Dvec = Dvec.full, ci = TRUE, parallel = TRUE)
+vus("full", T = EOC$CA125, Dvec = Dvec.full, ci = TRUE)
 ```
 
 ```

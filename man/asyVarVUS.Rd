@@ -5,8 +5,8 @@
 \title{Asymptotic variance estimation for VUS}
 \usage{
 asyVarVUS(obj_vus, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
-  BOOT = FALSE, nR = 250, parallel = FALSE, ncpus = ifelse(parallel,
-  detectCores()/2, NULL))
+  BOOT = FALSE, nR = 250, parallel = FALSE,
+  ncpus = ifelse(parallel, detectCores()/2, NULL))
 }
 \arguments{
 \item{obj_vus}{a result of a call to \code{\link{vus}}.}
@@ -36,7 +36,7 @@ asyVarVUS(obj_vus, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
 \code{asyVarVUS} computes the asymptotic variance of full data (FULL) and bias-corrected estimators (i.e. full imputation, mean score imputation, inverse probability weighting, semiparametric efficient and K nearest neighbor) of VUS.
 }
 \details{
-For the FULL and K nearest neighbor estimators, a bootstrap resampling process is employed to obtain their asymptotic variance.
+For the FULL estimator, a bootstrap resampling process or Jackknife approach is used to estimate the asymptotic variance, whereas, a bootstrap resampling process is employed to obtain the asymptotic variance of K nearest neighbor estimator.
 
 For the full imputation, mean score imputation, inverse probability weighting and semiparametric efficient estimators of VUS, the asymptotic variances are computed by using the explicit form. Furthermore, a bootstrap procedure is also available, useful in case of small sample sizes.
 }
@@ -49,11 +49,10 @@ Dfact.na <- Dna$D
 Dvec.na <- Dna$Dvec
 
 rho.out <- rhoMLogit(Dfact.na ~ CA125 + CA153 + Age, data = EOC, test = TRUE)
-pi.out <- psglm(V ~ CA125 + CA153 + Age, data = EOC, test = TRUE)
-vus.spe <- vus("spe", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out,
-               piEst = pi.out, ci = FALSE)
-var.spe <- asyVarVUS(vus.spe, T = EOC$CA125, Dvec = Dvec.na, V = EOC$V,
-                     rhoEst = rho.out, piEst = pi.out)
+vus.fi <- vus("fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out,
+              ci = FALSE)
+var.fi <- asyVarVUS(vus.fi, T = EOC$CA125, Dvec = Dvec.na, V = EOC$V,
+                   rhoEst = rho.out)
 
 \dontrun{
 var.bst.spe <- asyVarVUS(vus.spe, T = EOC$CA125, Dvec = Dvec.na, V = EOC$V,
@@ -64,7 +63,15 @@ var.bst.spe <- asyVarVUS(vus.spe, T = EOC$CA125, Dvec = Dvec.na, V = EOC$V,
 
 }
 \references{
+To Duc, K., Chiogna, M. and Adimari, G. (2018)
+Nonparametric estimation of ROC surfaces in presence of verification bias.
+\emph{REVSTAT Statistical Journal}. Accepted.
+
 To Duc, K., Chiogna, M. and Adimari, G. (2016)
 Bias-corrected methods for estimating the receiver operating characteristic surface of continuous diagnostic tests.
 \emph{Electronic Journal of Statistics}, \bold{10}, 3063-3113.
+
+Guangming, P., Xiping, W. and Wang, Z. (2013)
+Non-parameteric statistical inference for $P(X < Y < Z)$.
+\emph{Sankhya A}, \bold{75}, 1, 118-138.
 }
