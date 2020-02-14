@@ -60,7 +60,7 @@ rhoMLogit <- function(formula, data, test = FALSE, maxit = 500, trace = FALSE){
   }
   res.coef <- t(coef(tem1.out))
   colnames(res.coef) <- c("1", "2")
-  res.pr <- predict(tem1.out, newdata = X.design, type = "probs")
+  res.pr <- predict(tem1.out, newdata = data.temp, type = "probs")
   res.pr <- res.pr[, c(2, 3, 1)]
   colnames(res.pr) <- c("1", "2", "3")
   Hess <- tem1.out$Hessian

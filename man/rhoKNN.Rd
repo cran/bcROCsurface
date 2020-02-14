@@ -4,8 +4,14 @@
 \alias{rhoKNN}
 \title{K nearest-neighbor (KNN) regression}
 \usage{
-rhoKNN(X, Dvec, V, K, type = c("eucli", "manha", "canber", "lagran",
-  "mahala"), trace = FALSE)
+rhoKNN(
+  X,
+  Dvec,
+  V,
+  K,
+  type = c("eucli", "manha", "canber", "lagran", "mahala"),
+  trace = FALSE
+)
 }
 \arguments{
 \item{X}{a numeric design matrix.}

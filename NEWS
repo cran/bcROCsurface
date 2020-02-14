@@ -1,3 +1,8 @@
+Version 1.0-4 (12th Dec 2019)
+-------------
+* Fixed the bug in rhoMLogit()
+* Fixed the bug in logical values with respect to matrix class
+
 Version 1.0-3 (16th Oct 2018)
 -------------
 * Implement Jackknife approach for estimating standard error of FULL estimate of VUS

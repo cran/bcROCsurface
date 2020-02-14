@@ -69,13 +69,13 @@
 asyVarVUS <- function(obj_vus, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
                       BOOT = FALSE, nR = 250, parallel = FALSE,
                       ncpus = ifelse(parallel, detectCores()/2, NULL)){
-  if(class(obj_vus) != "vus") stop("The argument \"obj_vus\" is not a result of vus()")
+  if(!inherits(obj_vus, "vus")) stop("The argument \"obj_vus\" is not a result of vus()")
   ## checking the argument T
   if(missing(T)) stop("argument \"T\" is missing \n")
-  if(class(T) != "numeric" | any(is.na(T))) stop("variable \"T\" must be a numeric vector and not include NA values")
+  if(!inherits(T, "numeric") | any(is.na(T))) stop("variable \"T\" must be a numeric vector and not include NA values")
   ## checking Dvec
   if(missing(Dvec)) stop("argument \"Dvec\" is missing \n")
-  if(class(Dvec) != "matrix" | ncol(Dvec) != 3 | !all(is.element(na.omit(Dvec), c(0,1)))) stop("variable \"Dvec\" must be a binary matrix with 3 columns")
+  if(!inherits(Dvec, "matrix") | ncol(Dvec) != 3 | !all(is.element(na.omit(Dvec), c(0,1)))) stop("variable \"Dvec\" must be a binary matrix with 3 columns")
   if(length(T) != nrow(Dvec)) stop(gettextf("arguments imply differing number of observation: %d", length(T)), gettextf(", %d", nrow(Dvec)), domain = NA)
   VUS_obj <- obj_vus$vus.fit
   meth <- tolower(attr(VUS_obj, "name"))

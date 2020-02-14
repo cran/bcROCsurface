@@ -123,7 +123,7 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
   }
   ## checking the argument T
   if(missing(T)) stop("argument \"T\" is missing \n")
-  if(class(T) != "numeric" | any(is.na(T))) stop("variable \"T\" must be a numeric vector and not include NA values")
+  if(!inherits(T, "numeric") | any(is.na(T))) stop("variable \"T\" must be a numeric vector and not include NA values")
   name_diagnostic <- substitute(T)
   if (!is.character(name_diagnostic))  {
     name_diagnostic <- deparse(name_diagnostic)
@@ -138,7 +138,7 @@ vus <- function(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
   method_name <- toupper(method)
   ## checking Dvec
   if(missing(Dvec)) stop("argument \"Dvec\" is missing \n")
-  if(class(Dvec) != "matrix" | ncol(Dvec) != 3 | !all(is.element(na.omit(Dvec), c(0,1)))) stop("variable \"Dvec\" must be a binary matrix with 3 columns")
+  if(!inherits(Dvec, "matrix") | ncol(Dvec) != 3 | !all(is.element(na.omit(Dvec), c(0,1)))) stop("variable \"Dvec\" must be a binary matrix with 3 columns")
   if(length(T) != nrow(Dvec)) stop(gettextf("arguments imply differing number of observation: %d", length(T)), gettextf(", %d", nrow(Dvec)), domain = NA)
   Dvec.flag <- any(is.na(Dvec))
   ##

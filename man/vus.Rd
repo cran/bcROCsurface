@@ -4,10 +4,21 @@
 \alias{vus}
 \title{Estimation methods for volume under ROC surface (VUS)}
 \usage{
-vus(method = "full", T, Dvec, V, rhoEst = NULL, piEst = NULL,
-  ci = TRUE, ci.level = ifelse(ci, 0.95, NULL), BOOT = FALSE,
-  nR = ifelse(ci, 250, NULL), parallel = FALSE,
-  ncpus = ifelse(parallel, detectCores()/2, NULL), trace = TRUE)
+vus(
+  method = "full",
+  T,
+  Dvec,
+  V,
+  rhoEst = NULL,
+  piEst = NULL,
+  ci = TRUE,
+  ci.level = ifelse(ci, 0.95, NULL),
+  BOOT = FALSE,
+  nR = ifelse(ci, 250, NULL),
+  parallel = FALSE,
+  ncpus = ifelse(parallel, detectCores()/2, NULL),
+  trace = TRUE
+)
 }
 \arguments{
 \item{method}{name of bias-corrected estimation method to be used for estimating the VUS in presence of verification bias. See \code{\link{ROCs}} for more details.}

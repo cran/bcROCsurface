@@ -4,9 +4,18 @@
 \alias{asyCovTCF}
 \title{Asymptotic variance-covariance estimation for True Class Fractions (TCFs) at the cut point \eqn{(c_1, c_2)}}
 \usage{
-asyCovTCF(obj_tcf, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
-  BOOT = FALSE, nR = 250, parallel = FALSE,
-  ncpus = ifelse(parallel, detectCores()/2, NULL))
+asyCovTCF(
+  obj_tcf,
+  T,
+  Dvec,
+  V = NULL,
+  rhoEst = NULL,
+  piEst = NULL,
+  BOOT = FALSE,
+  nR = 250,
+  parallel = FALSE,
+  ncpus = ifelse(parallel, detectCores()/2, NULL)
+)
 }
 \arguments{
 \item{obj_tcf}{a result of a call to \code{\link{ROCs.tcf}}.}
@@ -98,7 +107,7 @@ To Duc, K., Chiogna, M. and Adimari, G. (2016a)
 Bias-corrected methods for estimating the receiver operating characteristic surface of continuous diagnostic tests.
 \emph{Electronic Journal of Statistics}, \bold{10}, 3063-3113.
 
-To Duc, K., Chiogna, M. and Adimari, G. (2016b)
-Nonparametric Estimation of ROC Surfaces Under Verification Bias.
-\url{https://arxiv.org/abs/1604.04656v1}. Submitted.
+To Duc, K., Chiogna, M. and Adimari, G. (2018)
+Nonparametric estimation of ROC surfaces in presence of verification bias.
+\emph{REVSTAT Statistical Journal}. Accepted.
 }

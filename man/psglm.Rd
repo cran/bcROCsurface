@@ -4,8 +4,7 @@
 \alias{psglm}
 \title{Fitting verification models}
 \usage{
-psglm(formula, data, model = "logit", test = FALSE, trace = TRUE,
-  ...)
+psglm(formula, data, model = "logit", test = FALSE, trace = TRUE, ...)
 }
 \arguments{
 \item{formula}{an object of class "formula": a symbolic description of the model to be fitted.}

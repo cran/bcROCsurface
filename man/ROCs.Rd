@@ -6,14 +6,28 @@
 \alias{ROCs}
 \title{Receiver operating characteristics surface for a continuous diagnostic test}
 \usage{
-ROCs.tcf(method = "full", T, Dvec, V = NULL, rhoEst = NULL,
-  piEst = NULL, cps)
+ROCs.tcf(method = "full", T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL, cps)
 
-ROCs(method = "full", T, Dvec, V, A = NULL, rhoEst = NULL,
-  piEst = NULL, ncp = 100, plot = TRUE, ellipsoid = FALSE,
-  cpst = NULL, level = 0.95, sur.col = c("gray40", "green"),
-  BOOT = FALSE, nR = 250, parallel = FALSE,
-  ncpus = ifelse(parallel, detectCores()/2, NULL), ...)
+ROCs(
+  method = "full",
+  T,
+  Dvec,
+  V,
+  A = NULL,
+  rhoEst = NULL,
+  piEst = NULL,
+  ncp = 100,
+  plot = TRUE,
+  ellipsoid = FALSE,
+  cpst = NULL,
+  level = 0.95,
+  sur.col = c("gray40", "green"),
+  BOOT = FALSE,
+  nR = 250,
+  parallel = FALSE,
+  ncpus = ifelse(parallel, detectCores()/2, NULL),
+  ...
+)
 }
 \arguments{
 \item{method}{a estimation method to be used for estimating the true class fractions in presence of verification bias. See 'Details'.}
@@ -151,9 +165,9 @@ To Duc, K., Chiogna, M. and Adimari, G. (2016a)
 Bias-corrected methods for estimating the receiver operating characteristic surface of continuous diagnostic tests.
 \emph{Electronic Journal of Statistics}, \bold{10}, 3063-3113.
 
-To Duc, K., Chiogna, M. and Adimari, G. (2016b)
-Nonparametric Estimation of ROC Surfaces Under Verification Bias.
-\url{https://arxiv.org/abs/1604.04656v1}. Submitted.
+To Duc, K., Chiogna, M. and Adimari, G. (2018)
+Nonparametric estimation of ROC surfaces in presence of verification bias.
+\emph{REVSTAT Statistical Journal}. Accepted.
 }
 \seealso{
 \code{\link{psglm}}, \code{\link{rhoMLogit}}, \code{\link[rgl]{plot3d}}.

@@ -4,9 +4,18 @@
 \alias{asyVarVUS}
 \title{Asymptotic variance estimation for VUS}
 \usage{
-asyVarVUS(obj_vus, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
-  BOOT = FALSE, nR = 250, parallel = FALSE,
-  ncpus = ifelse(parallel, detectCores()/2, NULL))
+asyVarVUS(
+  obj_vus,
+  T,
+  Dvec,
+  V = NULL,
+  rhoEst = NULL,
+  piEst = NULL,
+  BOOT = FALSE,
+  nR = 250,
+  parallel = FALSE,
+  ncpus = ifelse(parallel, detectCores()/2, NULL)
+)
 }
 \arguments{
 \item{obj_vus}{a result of a call to \code{\link{vus}}.}

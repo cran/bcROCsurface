@@ -31,8 +31,8 @@
 #' @import graphics
 #' @export
 CVknn <- function(X, Dvec, V, K.list = NULL, type = "eucli", plot = FALSE){
-  if(class(X) != "matrix") stop("\"XX\" not a matrix \n")
-  if(class(Dvec) != "matrix" | ncol(Dvec) != 3 | !all(is.element(na.omit(Dvec), c(0,1)))) stop("variable \"Dvec\" must be a binary matrix with 3 columns")
+  if(!inherits(X, "matrix")) stop("\"XX\" not a matrix \n")
+  if(!inherits(Dvec, "matrix") | ncol(Dvec) != 3 | !all(is.element(na.omit(Dvec), c(0,1)))) stop("variable \"Dvec\" must be a binary matrix with 3 columns")
   if(nrow(X) != nrow(Dvec)) stop(gettextf("arguments imply differing number of observation: %d", nrow(X)), gettextf(", %d", nrow(Dvec)), domain = NA)
   if(missing(V)) stop("object \"V\" is missing \n")
   x.ver <- X[V == 1, ]

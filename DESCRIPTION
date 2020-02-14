@@ -1,10 +1,10 @@
 Package: bcROCsurface
-Version: 1.0-3
-Date: 2018-10-16
+Version: 1.0-4
+Date: 2020-02-14
 Title: Bias-Corrected Methods for Estimating the ROC Surface of
         Continuous Diagnostic Tests
-Author: Khanh To Duc, with contributions from Monica Chiogna and Gianfranco Adimari
-Maintainer: Khanh To Duc <toduc@stat.unipd.it>
+Author: Duc-Khanh To, with contributions from Monica Chiogna and Gianfranco Adimari
+Maintainer: Duc-Khanh To  <toduc@stat.unipd.it>
 Description: The bias-corrected estimation methods for the receiver operating characteristics
   ROC surface and the volume under ROC surfaces (VUS) under missing at random (MAR)
   assumption.
@@ -17,10 +17,10 @@ LazyLoad: yes
 LazyData: TRUE
 ByteCompile: yes
 Encoding: UTF-8
-RoxygenNote: 6.1.0
+RoxygenNote: 7.0.2
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2018-10-16 15:00:01 UTC; khanh
+Packaged: 2020-02-14 09:39:00 UTC; Khanh
 Repository: CRAN
-Date/Publication: 2018-10-16 18:30:06 UTC
+Date/Publication: 2020-02-14 10:50:11 UTC

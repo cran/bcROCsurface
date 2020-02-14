@@ -33,9 +33,9 @@
 #' Bias-corrected methods for estimating the receiver operating characteristic surface of continuous diagnostic tests.
 #' \emph{Electronic Journal of Statistics}, \bold{10}, 3063-3113.
 #'
-#' To Duc, K., Chiogna, M. and Adimari, G. (2016b)
-#' Nonparametric Estimation of ROC Surfaces Under Verification Bias.
-#' \url{https://arxiv.org/abs/1604.04656v1}. Submitted.
+#' To Duc, K., Chiogna, M. and Adimari, G. (2018)
+#' Nonparametric estimation of ROC surfaces in presence of verification bias.
+#' \emph{REVSTAT Statistical Journal}. Accepted.
 #'
 #'
 #' @examples
@@ -105,10 +105,10 @@ asyCovTCF <- function(obj_tcf, T, Dvec, V = NULL, rhoEst = NULL, piEst = NULL,
   if(class(obj_tcf) != "tcfs") stop("The argument \"obj_tcf\" is not a result of a call to ROC.tcf()")
   ## checking the argument T
   if(missing(T)) stop("argument \"T\" is missing \n")
-  if(class(T) != "numeric" | any(is.na(T))) stop("variable \"T\" must be a numeric vector and not include NA values")
+  if(!inherits(T, "numeric") | any(is.na(T))) stop("variable \"T\" must be a numeric vector and not include NA values")
   ## checking Dvec
   if(missing(Dvec)) stop("argument \"Dvec\" is missing \n")
-  if(class(Dvec) != "matrix" | ncol(Dvec) != 3 | !all(is.element(na.omit(Dvec), c(0,1)))) stop("variable \"Dvec\" must be a binary matrix with 3 columns")
+  if(!inherits(Dvec, "matrix")| ncol(Dvec) != 3 | !all(is.element(na.omit(Dvec), c(0,1)))) stop("variable \"Dvec\" must be a binary matrix with 3 columns")
   if(length(T) != nrow(Dvec)) stop(gettextf("arguments imply differing number of observation: %d", length(T)), gettextf(", %d", nrow(Dvec)), domain = NA)
   ##
   method <- tolower(attr(obj_tcf, "name"))
