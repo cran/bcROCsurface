@@ -89,10 +89,13 @@
 #' # FULL data estimator
 #' Dfull <- preDATA(EOC$D.full, EOC$CA125)
 #' Dvec.full <- Dfull$Dvec
-#' ROCs("full", T = EOC$CA125, Dvec = Dvec.full, , ncp = 30, ellipsoid = TRUE,
-#'      cpst = c(-0.56, 2.31))
+#' if(requireNamespace("webshot2", quietly = TRUE)){
+#'    ROCs("full", T = EOC$CA125, Dvec = Dvec.full, ncp = 30, ellipsoid = TRUE,
+#'         cpst = c(-0.56, 2.31))
+#' }
 #' }
 #'
+#' \dontrun{
 #' # Preparing the missing disease status
 #' Dna <- preDATA(EOC$D, EOC$CA125)
 #' Dvec.na <- Dna$Dvec
@@ -100,32 +103,43 @@
 #'
 #' # FI estimator
 #' rho.out <- rhoMLogit(Dfact.na ~ CA125 + CA153 + Age, data = EOC, test = TRUE)
-#' ROCs("fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ncp = 30)
+#' if(requireNamespace("webshot2", quietly = TRUE)){
+#'    ROCs("fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ncp = 30)
+#' }
 #'
-#' \dontrun{
 #' # Plot ROC surface and add ellipsoid confidence region
-#' ROCs("fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ncp = 30,
-#'      ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+#' if(requireNamespace("webshot2", quietly = TRUE)){
+#'    ROCs("fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ncp = 30,
+#'         ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+#' }
 #'
 #' # MSI estimator
-#' ROCs("msi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ncp = 30,
-#'      ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+#' if(requireNamespace("webshot2", quietly = TRUE)){
+#'    ROCs("msi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ncp = 30,
+#'         ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+#' }
 #'
 #' # IPW estimator
 #' pi.out <- psglm(V ~ CA125 + CA153 + Age, data = EOC, test = TRUE)
-#' ROCs("ipw", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, piEst = pi.out, ncp = 30,
-#'      ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+#' if(requireNamespace("webshot2", quietly = TRUE)){
+#'    ROCs("ipw", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, piEst = pi.out, ncp = 30,
+#'         ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+#' }
 #'
 #' # SPE estimator
-#' ROCs("spe", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ncp = 30,
-#'      piEst = pi.out, ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+#' if(requireNamespace("webshot2", quietly = TRUE)){
+#'    ROCs("spe", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ncp = 30,
+#'         piEst = pi.out, ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+#' }
 #'
 #' # 1NN estimator
 #' XX <- cbind(EOC$CA125, EOC$CA153, EOC$Age)
 #' K.opt <- CVknn(X = XX, Dvec = Dvec.na, V = EOC$V, type = "mahala", plot = TRUE)
 #' rho.1nn <- rhoKNN(X = XX, Dvec = Dvec.na, V = EOC$V, K = K.opt, type = "mahala")
-#' ROCs("knn", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.1nn, ncp = 30,
-#'      ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+#' if(requireNamespace("webshot2", quietly = TRUE)){
+#'    ROCs("knn", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.1nn, ncp = 30,
+#'         ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+#' }
 #'
 #' ## Compute TCFs at three cut points
 #' cutps <- rbind(c(0,0.5), c(0,1), c(0.5,1))

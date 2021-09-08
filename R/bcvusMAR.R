@@ -75,6 +75,7 @@
 #' vus("full", T = EOC$CA125, Dvec = Dvec.full)
 #' }
 #'
+#' \dontrun{
 #' # Preparing the missing disease status
 #' Dna <- preDATA(EOC$D, EOC$CA125)
 #' Dfact.na <- Dna$D
@@ -84,7 +85,6 @@
 #'
 #' vus("fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out)
 #'
-#' \dontrun{
 #' # MSI estimator
 #' vus("msi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out)
 #'

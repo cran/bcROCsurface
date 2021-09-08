@@ -9,6 +9,14 @@ vignette: >
 output: html_document
 ---
 
+```{r check pandoc, eval=TRUE, echo=FALSE}
+if (!requireNamespace("rmarkdown", quietly = TRUE) ||
+      !rmarkdown::pandoc_available("1.14")) {
+    warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
+    knitr::knit_exit()
+  }
+```
+
 # Install and Load the package
 
 To install the package from CRAN, type:
@@ -129,7 +137,7 @@ vus("full", T = EOC$CA125, Dvec = Dvec.full, ci = TRUE)
 ```
 
 ### FI and MSI Estimator
-Now, we compute the FI and MSI estimator with missing data. First, we need to estimate the disease probabilities by using multnomial logistic model. In bcROCsurface package, this work is done by using `rhoMLogit()` function.
+Now, we compute the FI and MSI estimator with missing data. First, we need to estimate the disease probabilities by using multinomial logistic model. In bcROCsurface package, this work is done by using `rhoMLogit()` function.
 
 ```{r disease, eval = TRUE}
 Dna <- preDATA(EOC$D, EOC$CA125)

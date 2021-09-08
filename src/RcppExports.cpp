@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // asyVarVUS_C
 NumericVector asyVarVUS_C(NumericVector tt, NumericMatrix D_hat, double mu_hat, NumericMatrix EstFunc, NumericMatrix Hess_inv, NumericMatrix Der_D1_hat, NumericMatrix Der_D2_hat, NumericMatrix Der_D3_hat);
 RcppExport SEXP _bcROCsurface_asyVarVUS_C(SEXP ttSEXP, SEXP D_hatSEXP, SEXP mu_hatSEXP, SEXP EstFuncSEXP, SEXP Hess_invSEXP, SEXP Der_D1_hatSEXP, SEXP Der_D2_hatSEXP, SEXP Der_D3_hatSEXP) {
