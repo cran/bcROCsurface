@@ -18,13 +18,13 @@ library(bcROCsurface)
 #  head(EOC)
 
 ## ----preDiseaseFULL, eval=TRUE------------------------------------------------
-Dfull <- preDATA(EOC$D.full, EOC$CA125)
+dise_full <- pre_data(EOC$D.full, EOC$CA125)
 
 ## ---- eval=FALSE--------------------------------------------------------------
-#  head(Dfull$D)
+#  head(dise_full$dise)
 
 ## ---- eval=FALSE--------------------------------------------------------------
-#  head(Dfull$Dvec)
+#  head(dise_full$dise_vec)
 
 ## ----setup, echo=FALSE--------------------------------------------------------
 library(knitr)
@@ -32,63 +32,76 @@ library(rgl)
 knit_hooks$set(webgl = hook_webgl)
 
 ## ----ROCsFULL, webGL = TRUE---------------------------------------------------
-Dvec.full <- Dfull$Dvec
-ROCs(method = "full", T = EOC$CA125, Dvec = Dvec.full, ncp = 30, ellipsoid = TRUE,
-     cpst = c(-0.56, 2.31))
+dise_vec_full <- dise_full$dise_vec
+rocs(method = "full", diag_test =  EOC$CA125, dise_vec = dise_vec_full,
+     ncp = 30, ellipsoid = TRUE, cpst = c(-0.56, 2.31))
 
 ## ----vusfull, eval = FALSE----------------------------------------------------
-#  vus("full", T = EOC$CA125, Dvec = Dvec.full, ci = TRUE)
+#  vus_mar("full", diag_test = EOC$CA125, dise_vec = dise_vec_full, ci = TRUE)
 
 ## ----disease, eval = TRUE-----------------------------------------------------
-Dna <- preDATA(EOC$D, EOC$CA125)
-Dvec.na <- Dna$Dvec
-D.na <- Dna$D
-rho.out <- rhoMLogit(D.na ~ CA125 + CA153 + Age, data = EOC, test = TRUE, trace = TRUE)
+dise_na <- pre_data(EOC$D, EOC$CA125)
+dise_vec_na <- dise_na$dise_vec
+dise_fact_na <- dise_na$dise
+rho_out <- rho_mlogit(dise_fact_na ~ CA125 + CA153 + Age, data = EOC, 
+                      test = TRUE)
 
 ## ----ROCsFI, webgl = TRUE-----------------------------------------------------
-ROCs(method = "fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ncp = 30,
-     ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+rocs(method = "fi", diag_test =  EOC$CA125, dise_vec = dise_vec_na, 
+     veri_stat = EOC$V, rho_est = rho_out, ncp = 30, ellipsoid = TRUE, 
+     cpst = c(-0.56, 2.31))
 
 ## ----vusfi,  eval=FALSE-------------------------------------------------------
-#  vus(method = "fi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ci = TRUE)
+#  vus_mar(method = "fi", diag_test = EOC$CA125, dise_vec = dise_vec_na,
+#          veri_stat = EOC$V, rho_est = rho_out, ci = TRUE)
 
 ## ----ROCsMSI, webgl = TRUE----------------------------------------------------
-ROCs(method = "msi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ncp = 30,
+rocs(method = "msi", diag_test = EOC$CA125, dise_vec = dise_vec_na, 
+     veri_stat = EOC$V, rho_est = rho_out, ncp = 30,
      ellipsoid = TRUE, cpst = c(-0.56, 2.31))
 
 ## ----vusmsi,  eval=FALSE------------------------------------------------------
-#  vus(method = "msi", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out, ci = TRUE)
+#  vus_mar(method = "msi", diag_test = EOC$CA125, dise_vec = dise_vec_na,
+#          veri_stat = EOC$V, rho_est = rho_out, ci = TRUE)
 
 ## ----verification, eval = TRUE------------------------------------------------
-pi.out <- psglm(V ~ CA125 + CA153 + Age, data = EOC, model = "logit", test = TRUE, trace = TRUE)
+pi_out <- psglm(V ~ CA125 + CA153 + Age, data = EOC, model = "logit", 
+                test = TRUE, trace = TRUE)
 
 ## ----ROCsIPW, webgl = TRUE----------------------------------------------------
-ROCs(method = "ipw", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, piEst = pi.out, ncp = 30,
+rocs(method = "ipw", diag_test = EOC$CA125, dise_vec = dise_vec_na, 
+     veri_stat = EOC$V, pi_est = pi_out, ncp = 30,
      ellipsoid = TRUE, cpst = c(-0.56, 2.31))
 
 ## ----vusipw, eval=FALSE-------------------------------------------------------
-#  vus(method = "ipw", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, piEst = pi.out, ci = TRUE)
+#  vus_mar(method = "ipw", diag_test = EOC$CA125, dise_vec = dise_vec_na,
+#          veri_stat = EOC$V, pi_est = pi_out, ci = TRUE)
 
 ## ----ROCsSPE, webgl = TRUE----------------------------------------------------
-ROCs(method = "spe", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out,
-     piEst = pi.out, ncp = 30, ellipsoid = TRUE, cpst = c(-0.56, 2.31))
+rocs(method = "spe", diag_test = EOC$CA125, dise_vec = dise_vec_na, 
+     veri_stat = EOC$V, rho_est = rho_out,
+     pi_est = pi_out, ncp = 30, ellipsoid = TRUE, cpst = c(-0.56, 2.31))
 
 ## ----vusspe, eval=FALSE-------------------------------------------------------
-#  vus(method = "spe", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.out,
-#      piEst = pi.out, ci = TRUE)
+#  vus_mar(method = "spe", diag_test = EOC$CA125, dise_vec = dise_vec_na,
+#          veri_stat = EOC$V, rho_est = rho_out,
+#          pi_est = pi_out, ci = TRUE)
 
 ## ----1nn, eval = TRUE---------------------------------------------------------
-XX <- cbind(EOC$CA125, EOC$CA153, EOC$Age)
-rho.1nn <- rhoKNN(XX, Dvec = Dvec.na, V = EOC$V, K = 1, type = "mahala")
+x_mat <- cbind(EOC$CA125, EOC$CA153, EOC$Age)
+rho_1nn <- rho_knn(x_mat, dise_vec = dise_vec_na, veri_stat = EOC$V, k = 1, 
+                   type = "mahala")
 
 ## ----ROCs1NN, webgl = TRUE----------------------------------------------------
-ROCs("knn", T = EOC$CA125, Dvec.na, V = EOC$V, rhoEst = rho.1nn, ncp = 30, ellipsoid = TRUE,
+rocs("knn", diag_test = EOC$CA125, dise_vec_na, veri_stat = EOC$V, 
+     rho_est = rho_1nn, ncp = 30, ellipsoid = TRUE,
      cpst = c(-0.56, 2.31))
 
 ## ----vus1nn, eval = FALSE-----------------------------------------------------
-#  vus(method = "knn", T = EOC$CA125, Dvec = Dvec.na, V = EOC$V, rhoEst = rho.1nn, ci = TRUE,
-#      parallel = TRUE)
+#  vus_mar(method = "knn", diag_test = EOC$CA125, dise_vec = dise_vec_na,
+#          veri_stat = EOC$V, rho_est = rho_1nn, ci = TRUE,
+#          parallel = TRUE)
 
 ## ----cvKnn, eval = TRUE-------------------------------------------------------
-CVknn(XX, Dvec.na, EOC$V, type = "mahala", plot = TRUE)
+cv_knn(x_mat, dise_vec_na, EOC$V, type = "mahala", plot = TRUE)
 
